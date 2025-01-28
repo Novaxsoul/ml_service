@@ -3,8 +3,8 @@ import pandas as pd
 import os
 from apps.ml.income_classifier.base_classifier import BaseClassifier
 
-class RandomForestClassifier(BaseClassifier):
+class ExtraTreesClassifier(BaseClassifier):
     def __init__(self):
         # Get the absolute path to the directory containing this file
-        self.model = "random_forest.joblib"
+        self.model = "extra_trees.joblib"
         super().__init__(self.model)

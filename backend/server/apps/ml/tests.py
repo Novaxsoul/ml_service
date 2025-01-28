@@ -2,11 +2,12 @@ import inspect
 from django.test import TestCase
 
 from apps.ml.income_classifier.random_forest import RandomForestClassifier
+from apps.ml.income_classifier.extra_trees import ExtraTreesClassifier
 from apps.ml.registry import MLRegistry
 
 class MLTest(TestCase):
-    def test_rf_algorithm(self):
-        input_data = {
+    def setUp(self):
+        self.input_data = {
             "age": 37,
             "workclass": "Private",
             "fnlwgt": 34146,
@@ -22,8 +23,17 @@ class MLTest(TestCase):
             "hours-per-week": 68,
             "native-country": "United-States"
         }
+
+    def test_rf_algorithm(self):
         my_alg = RandomForestClassifier()
-        response = my_alg.compute_prediction(input_data)
+        response = my_alg.compute_prediction(self.input_data)
+        self.assertEqual("OK", response["status"])
+        self.assertTrue("label" in response)
+        self.assertEqual("<=50K", response["label"])
+    
+    def test_et_algorithm(self):
+        my_alg = ExtraTreesClassifier()
+        response = my_alg.compute_prediction(self.input_data)
         self.assertEqual("OK", response["status"])
         self.assertTrue("label" in response)
         self.assertEqual("<=50K", response["label"])
